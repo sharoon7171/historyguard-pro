@@ -68,7 +68,7 @@ class BlockHistoryUtils {
     const urlLower = url.toLowerCase();
     const keywordLower = keyword.toLowerCase();
     
-    // Simple exact string matching - if keyword appears anywhere in URL, it matches
+    // Simple text matching - if keyword appears anywhere in URL, it matches
     return urlLower.includes(keywordLower);
   }
 
