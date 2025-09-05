@@ -68,10 +68,8 @@ class BlockHistoryUtils {
     const urlLower = url.toLowerCase();
     const keywordLower = keyword.toLowerCase();
     
-    // Exact matching - only match if the keyword appears as a complete word in the URL
-    // This prevents partial matches like "chrome" matching "chrome.google.com"
-    const exactPattern = new RegExp(`(^|\\/|\\?|&|#|\\.)${keywordLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\/|\\?|&|#|\\.|$)`, 'i');
-    return exactPattern.test(urlLower);
+    // Simple exact string matching - if keyword appears anywhere in URL, it matches
+    return urlLower.includes(keywordLower);
   }
 
   // Check if URL matches any keywords
