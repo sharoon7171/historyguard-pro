@@ -244,13 +244,13 @@ async function handleClearHistory(data) {
 // Helper function to clear history with keyword
 async function clearHistoryWithKeyword(keyword) {
   try {
-    // Get all history items using config
+    // Get ALL history items (not just those matching the keyword in Chrome's search)
     const historyItems = await chrome.history.search({
-      text: keyword,
+      text: '', // Empty text to get all history
       maxResults: CONFIG.HISTORY.MAX_SEARCH_RESULTS
     });
     
-    // Delete each matching item using utils
+    // Delete each matching item using our custom matching logic
     for (const item of historyItems) {
       if (item.url && BlockHistoryUtils.urlMatchesKeyword(item.url, keyword)) {
         await chrome.history.deleteUrl({ url: item.url });
