@@ -68,7 +68,20 @@ class BlockHistoryUtils {
     const urlLower = url.toLowerCase();
     const keywordLower = keyword.toLowerCase();
     
-    return urlLower.includes(keywordLower);
+    // More precise matching - check for exact domain or path segments
+    // This prevents partial matches like "chrome" matching "chrome.google.com"
+    
+    // Check if keyword is a complete domain (contains dots)
+    if (keywordLower.includes('.')) {
+      // For domains, check if URL starts with the domain or contains it as a complete domain
+      const domainPattern = new RegExp(`(^|\\/\\/)${keywordLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\/|$)`, 'i');
+      return domainPattern.test(urlLower);
+    }
+    
+    // For single words, check if it's a complete word in the URL
+    // This prevents "chrome" from matching "chrome.google.com"
+    const wordPattern = new RegExp(`(^|\\/|\\?|&|#)${keywordLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\/|\\?|&|#|$)`, 'i');
+    return wordPattern.test(urlLower);
   }
 
   // Check if URL matches any keywords
