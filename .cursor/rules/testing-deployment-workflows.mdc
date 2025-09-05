@@ -1,0 +1,571 @@
+---
+description: Chrome Extension Testing & Deployment - CI/CD, Quality Assurance, Store Publishing
+globs:
+- "**/test/**"
+- "**/tests/**"
+- "**/*.test.*"
+- "**/*.spec.*"
+- "**/package.json"
+- "**/webpack.config.*"
+- "**/.github/**"
+- "**/jest.config.*"
+- "**/playwright.config.*"
+alwaysApply: false
+priority: low
+---
+
+# Chrome Extension Testing & Deployment Workflows
+
+## Testing Strategy Overview
+- **Unit Testing** - Individual functions and modules
+- **Integration Testing** - Chrome APIs and messaging
+- **End-to-End Testing** - Complete user workflows
+- **Security Testing** - Vulnerability assessments
+- **Performance Testing** - Memory and execution profiling
+- **Cross-Browser Testing** - Chrome, Edge, Firefox (if supported)
+
+## Unit Testing Setup
+```javascript
+// ✅ Jest Configuration for Chrome Extension
+// jest.config.mjs
+export default {
+  testEnvironment: 'jsdom',
+  extensionsToTreatAsEsm: ['.mjs'],
+  moduleNameMapping: {
+    '^chrome://(.*)$': '<rootDir>/test/mocks/chrome-$1.mjs'
+  },
+  setupFilesAfterEnv: ['<rootDir>/test/setup.mjs'],
+  transform: {
+    '^.+\\.mjs$': 'babel-jest'
+  },
+  collectCoverageFrom: [
+    'src/**/*.mjs',
+    '!src/**/*.test.mjs',
+    '!src/test/**'
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  }
+};
+
+// ✅ Chrome API Mocks
+// test/mocks/chrome-runtime.mjs
+export const chrome = {
+  runtime: {
+    sendMessage: jest.fn(),
+    onMessage: {
+      addListener: jest.fn(),
+      removeListener: jest.fn()
+    },
+    getManifest: jest.fn(() => ({
+      version: '1.0.0',
+      name: 'Test Extension'
+    })),
+    id: 'test-extension-id'
+  },
+  storage: {
+    sync: {
+      get: jest.fn(),
+      set: jest.fn(),
+      remove: jest.fn()
+    },
+    local: {
+      get: jest.fn(),
+      set: jest.fn(),
+      remove: jest.fn()
+    }
+  },
+  tabs: {
+    query: jest.fn(),
+    sendMessage: jest.fn(),
+    create: jest.fn()
+  }
+};
+
+global.chrome = chrome;
+```
+
+## Test Examples
+```javascript
+// ✅ Unit Test Example
+// test/storage-manager.test.mjs
+// Tests for ChromeStorageManager from @javascript-mjs-standards
+import { ChromeStorageManager } from '../lib/chrome-storage-manager.mjs';
+
+describe('ChromeStorageManager', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should save data to sync storage', async () => {
+    const testData = { key: 'value' };
+    chrome.storage.sync.set.mockResolvedValue(undefined);
+
+    await ChromeStorageManager.set(testData);
+
+    expect(chrome.storage.sync.set).toHaveBeenCalledWith(testData);
+  });
+
+  test('should retrieve data from sync storage', async () => {
+    const testData = { key: 'value' };
+    chrome.storage.sync.get.mockResolvedValue(testData);
+
+    const result = await ChromeStorageManager.get(['key']);
+
+    expect(result).toEqual(testData);
+  });
+
+  test('should handle storage errors gracefully', async () => {
+    const error = new Error('Storage quota exceeded');
+    chrome.storage.sync.set.mockRejectedValue(error);
+
+    await expect(ChromeStorageManager.set({ key: 'value' }))
+      .rejects
+      .toThrow('Failed to retrieve data');
+  });
+});
+
+// ✅ Integration Test Example
+// test/integration/messaging.test.mjs
+import { MessageHandler } from '../lib/message-handler.mjs';
+
+describe('Message Integration', () => {
+  test('should handle background to content script communication', async () => {
+    const testMessage = { action: 'GET_DATA', data: { id: 1 } };
+    const expectedResponse = { success: true, data: { id: 1, name: 'Test' } };
+
+    chrome.runtime.sendMessage.mockResolvedValue(expectedResponse);
+
+    const response = await MessageHandler.sendToBackground(
+      testMessage.action, 
+      testMessage.data
+    );
+
+    expect(response).toEqual(expectedResponse.data);
+    expect(chrome.runtime.sendMessage).toHaveBeenCalledWith(testMessage);
+  });
+});
+```
+
+## End-to-End Testing with Playwright
+```javascript
+// ✅ E2E Test Setup
+// test/e2e/extension.spec.mjs
+import { test, expect, chromium } from '@playwright/test';
+import path from 'path';
+
+test.describe('Chrome Extension E2E', () => {
+  let browser, context, page;
+
+  test.beforeAll(async () => {
+    const extensionPath = path.resolve('./dist');
+    
+    browser = await chromium.launch({
+      headless: false,
+      args: [
+        `--disable-extensions-except=${extensionPath}`,
+        `--load-extension=${extensionPath}`,
+        '--no-sandbox'
+      ]
+    });
+    
+    context = await browser.newContext();
+    page = await context.newPage();
+  });
+
+  test.afterAll(async () => {
+    await browser.close();
+  });
+
+  test('should open extension popup', async () => {
+    // Navigate to extension popup
+    const extensionId = await getExtensionId(page);
+    await page.goto(`chrome-extension://${extensionId}/popup/popup.html`);
+
+    // Verify popup loads correctly
+    await expect(page.locator('h1')).toContainText('Extension Name');
+    await expect(page.locator('.main-button')).toBeVisible();
+  });
+
+  test('should inject content script', async () => {
+    await page.goto('https://example.com');
+    
+    // Wait for content script to inject
+    await page.waitForSelector('.extension-overlay');
+    
+    // Verify extension features work
+    const overlay = page.locator('.extension-overlay');
+    await expect(overlay).toBeVisible();
+  });
+
+  test('should save and retrieve settings', async () => {
+    const extensionId = await getExtensionId(page);
+    await page.goto(`chrome-extension://${extensionId}/options/options.html`);
+
+    // Modify settings
+    await page.fill('#theme-select', 'dark');
+    await page.click('#save-button');
+
+    // Verify settings were saved
+    await expect(page.locator('.success-message')).toBeVisible();
+
+    // Reload and verify persistence
+    await page.reload();
+    await expect(page.locator('#theme-select')).toHaveValue('dark');
+  });
+});
+
+async function getExtensionId(page) {
+  await page.goto('chrome://extensions/');
+  const extensionId = await page.evaluate(() => {
+    const extensions = document.querySelectorAll('extensions-item');
+    for (const ext of extensions) {
+      if (ext.shadowRoot.textContent.includes('Extension Name')) {
+        return ext.id;
+      }
+    }
+  });
+  return extensionId;
+}
+```
+
+## Performance Testing
+```javascript
+// ✅ Performance Test Setup
+// test/performance/memory-usage.test.mjs
+import { performance } from 'perf_hooks';
+
+describe('Performance Tests', () => {
+  test('should not exceed memory limits', async () => {
+    const initialMemory = process.memoryUsage();
+    
+    // Simulate heavy operations
+    const largeDataSet = await processLargeDataSet();
+    
+    const finalMemory = process.memoryUsage();
+    const memoryIncrease = finalMemory.heapUsed - initialMemory.heapUsed;
+    
+    // Should not increase memory by more than 10MB
+    expect(memoryIncrease).toBeLessThan(10 * 1024 * 1024);
+  });
+
+  test('should complete operations within time limits', async () => {
+    const startTime = performance.now();
+    
+    await performComplexOperation();
+    
+    const endTime = performance.now();
+    const duration = endTime - startTime;
+    
+    // Should complete within 1 second
+    expect(duration).toBeLessThan(1000);
+  });
+});
+```
+
+## Build & Development Workflow
+```javascript
+// ✅ Webpack Configuration
+// webpack.config.mjs
+import path from 'path';
+import CopyPlugin from 'copy-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+
+export default {
+  mode: process.env.NODE_ENV || 'development',
+  entry: {
+    'service-worker': './src/service-worker.mjs',
+    'content-main': './src/content-scripts/content-main.mjs',
+    'popup/popup': './src/popup/popup.mjs',
+    'options/options': './src/options/options.mjs'
+  },
+  output: {
+    path: path.resolve('./dist'),
+    filename: '[name].mjs',
+    clean: true
+  },
+  module: {
+    rules: [
+      {
+        test: /\.mjs$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                targets: { chrome: '88' },
+                modules: false
+              }]
+            ]
+          }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
+    ]
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/manifest.json', to: 'manifest.json' },
+        { from: 'src/popup/popup.html', to: 'popup/popup.html' },
+        { from: 'src/options/options.html', to: 'options/options.html' },
+        { from: 'src/assets', to: 'assets' }
+      ]
+    })
+  ],
+  resolve: {
+    extensions: ['.mjs', '.js']
+  },
+  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : false
+};
+```
+
+## Package.json Scripts
+```json
+{
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "lint": "eslint src/ --ext .mjs",
+    "lint:fix": "eslint src/ --ext .mjs --fix",
+    "security-audit": "npm audit && npm run security:check",
+    "security:check": "node scripts/security-check.mjs",
+    "package": "npm run build && node scripts/package-extension.mjs",
+    "publish:chrome": "node scripts/publish-chrome-store.mjs",
+    "publish:firefox": "node scripts/publish-firefox-store.mjs"
+  }
+}
+```
+
+## GitHub Actions CI/CD
+```yaml
+# ✅ .github/workflows/ci-cd.yml
+name: Chrome Extension CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Run unit tests
+      run: npm run test:coverage
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+
+    - name: Security audit
+      run: npm run security-audit
+
+    - name: Build extension
+      run: npm run build
+
+    - name: Run E2E tests
+      run: |
+        npx playwright install
+        npm run test:e2e
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run security scan
+      uses: securecodewarrior/github-action-add-sarif@v1
+      with:
+        sarif-file: security-scan-results.sarif
+
+  deploy:
+    needs: [test, security]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build for production
+      run: npm run build
+
+    - name: Package extension
+      run: npm run package
+
+    - name: Upload to Chrome Web Store
+      env:
+        CHROME_STORE_CLIENT_ID: ${{ secrets.CHROME_STORE_CLIENT_ID }}
+        CHROME_STORE_CLIENT_SECRET: ${{ secrets.CHROME_STORE_CLIENT_SECRET }}
+        CHROME_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_STORE_REFRESH_TOKEN }}
+      run: npm run publish:chrome
+```
+
+## Extension Packaging & Publishing
+```javascript
+// ✅ scripts/package-extension.mjs
+import fs from 'fs/promises';
+import path from 'path';
+import archiver from 'archiver';
+
+async function packageExtension() {
+  const distPath = './dist';
+  const outputPath = './packages';
+  const manifest = JSON.parse(await fs.readFile(`${distPath}/manifest.json`, 'utf8'));
+  const version = manifest.version;
+  const zipPath = `${outputPath}/extension-v${version}.zip`;
+
+  // Ensure output directory exists
+  await fs.mkdir(outputPath, { recursive: true });
+
+  // Create zip archive
+  const output = (await fs.open(zipPath, 'w')).createWriteStream();
+  const archive = archiver('zip', { zlib: { level: 9 } });
+
+  archive.pipe(output);
+  archive.directory(distPath, false);
+  
+  await archive.finalize();
+  
+  console.log(`✅ Extension packaged: ${zipPath}`);
+  
+  // Validate package
+  await validatePackage(zipPath);
+}
+
+async function validatePackage(zipPath) {
+  // Check file size (Chrome Web Store limit: 128MB)
+  const stats = await fs.stat(zipPath);
+  const sizeMB = stats.size / (1024 * 1024);
+  
+  if (sizeMB > 128) {
+    throw new Error(`Package too large: ${sizeMB.toFixed(2)}MB (max 128MB)`);
+  }
+  
+  console.log(`✅ Package size: ${sizeMB.toFixed(2)}MB`);
+}
+
+packageExtension().catch(console.error);
+```
+
+## Quality Gates & Release Process
+```javascript
+// ✅ scripts/pre-release-check.mjs
+import { execSync } from 'child_process';
+
+const checks = [
+  {
+    name: 'Linting',
+    command: 'npm run lint',
+    required: true
+  },
+  {
+    name: 'Unit Tests',
+    command: 'npm run test',
+    required: true
+  },
+  {
+    name: 'E2E Tests',
+    command: 'npm run test:e2e',
+    required: true
+  },
+  {
+    name: 'Security Audit',
+    command: 'npm run security-audit',
+    required: true
+  },
+  {
+    name: 'Build',
+    command: 'npm run build',
+    required: true
+  }
+];
+
+async function runPreReleaseChecks() {
+  console.log('🚀 Running pre-release checks...\n');
+  
+  for (const check of checks) {
+    try {
+      console.log(`⏳ Running ${check.name}...`);
+      execSync(check.command, { stdio: 'pipe' });
+      console.log(`✅ ${check.name} passed\n`);
+    } catch (error) {
+      console.error(`❌ ${check.name} failed:`);
+      console.error(error.stdout?.toString() || error.message);
+      
+      if (check.required) {
+        process.exit(1);
+      }
+    }
+  }
+  
+  console.log('🎉 All pre-release checks passed!');
+}
+
+runPreReleaseChecks();
+```
+
+## Testing Checklist
+### Pre-deployment Testing
+- [ ] Unit tests pass (>80% coverage)
+- [ ] Integration tests pass
+- [ ] E2E tests pass on multiple Chrome versions
+- [ ] Performance tests within limits
+- [ ] Security audit clean
+- [ ] Manual testing on target websites
+- [ ] Cross-browser compatibility (if applicable)
+- [ ] Accessibility testing
+- [ ] Load testing with large datasets
+- [ ] Error handling verification
+
+### Release Validation
+- [ ] Manifest version updated
+- [ ] Changelog updated
+- [ ] Screenshots updated
+- [ ] Store descriptions updated
+- [ ] Privacy policy reviewed
+- [ ] Terms of service reviewed
+- [ ] Beta testing completed
+- [ ] Staged rollout planned

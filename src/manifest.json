@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "HistoryGuard Pro",
+  "version": "1.0.0",
+  "description": "Advanced browser history management with intelligent keyword filtering and privacy protection",
+  "author": "SQ Tech",
+  "homepage_url": "https://sqtech.dev",
+  
+  "permissions": [
+    "storage",
+    "history"
+  ],
+  
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "HistoryGuard Pro",
+    "default_icon": {
+      "16": "assets/icons/icon.png",
+      "48": "assets/icons/icon.png",
+      "128": "assets/icons/icon.png"
+    }
+  },
+  
+  "background": {
+    "service_worker": "background/service-worker.mjs",
+    "type": "module"
+  },
+  
+  "icons": {
+    "16": "assets/icons/icon.png",
+    "48": "assets/icons/icon.png",
+    "128": "assets/icons/icon.png"
+  },
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline';"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["popup/*", "background/*", "lib/*", "config/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "historyguard-pro-privacy-policy",
+  "version": "1.0.0",
+  "description": "Privacy Policy page for HistoryGuard Pro Chrome Extension",
+  "main": "privacy-policy.html",
+  "scripts": {
+    "build": "echo 'No build step needed for static HTML'",
+    "start": "echo 'Static HTML deployment'"
+  },
+  "keywords": [
+    "privacy-policy",
+    "historyguard-pro",
+    "chrome-extension"
+  ],
+  "author": "SQ Tech",
+  "license": "MIT"
+}

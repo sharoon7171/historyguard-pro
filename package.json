@@ -1,0 +1,30 @@
+{
+  "name": "block-history-extension",
+  "version": "1.0.0",
+  "description": "Block and manage browser history with keyword matching",
+  "author": "SQ Tech",
+  "homepage": "https://sqtech.dev",
+  "main": "src/background/service-worker.mjs",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "webpack --mode development --watch",
+    "deploy:privacy": "vercel --prod"
+  },
+  "devDependencies": {
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "copy-webpack-plugin": "^11.0.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "babel-loader": "^9.1.3",
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "eslint": "^8.45.0"
+  },
+  "keywords": [
+    "chrome-extension",
+    "history",
+    "privacy",
+    "blocking"
+  ],
+  "license": "MIT"
+}

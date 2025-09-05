@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block History</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <h1>HistoryGuard Pro</h1>
+      <div class="version">v1.0.0</div>
+    </header>
+
+            <!-- Main Content -->
+        <main class="main-content">
+          <!-- Loading Skeleton -->
+          <div class="skeleton-container" id="skeletonContainer">
+            <!-- History Blocking Skeleton -->
+            <section class="feature-section skeleton-section">
+              <div class="skeleton-header">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-status"></div>
+              </div>
+              <div class="skeleton-description"></div>
+              <div class="skeleton-toggle">
+                <div class="skeleton-toggle-text"></div>
+                <div class="skeleton-toggle-switch"></div>
+              </div>
+            </section>
+
+            <!-- Keywords Skeleton -->
+            <section class="feature-section skeleton-section">
+              <div class="skeleton-header">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-count"></div>
+              </div>
+              <div class="skeleton-description"></div>
+              <div class="skeleton-input-group">
+                <div class="skeleton-input"></div>
+                <div class="skeleton-button"></div>
+              </div>
+              <div class="skeleton-search"></div>
+              <div class="skeleton-keywords">
+                <div class="skeleton-keyword-item"></div>
+                <div class="skeleton-keyword-item"></div>
+                <div class="skeleton-keyword-item"></div>
+              </div>
+              <div class="skeleton-action-button"></div>
+            </section>
+          </div>
+
+          <!-- Actual Content (Hidden initially) -->
+          <div class="content-container" id="contentContainer" style="display: none;">
+            <!-- History Blocking Section -->
+            <section class="feature-section">
+              <div class="feature-header">
+                <h2>Privacy Protection</h2>
+                <div class="status-indicator" id="historyStatus">
+                  <span class="status-dot"></span>
+                  <span class="status-text">Disabled</span>
+                </div>
+              </div>
+              <div class="feature-description">
+                Prevent new browsing history from being recorded
+              </div>
+              <div class="toggle-container">
+                <label class="toggle-label" for="historyToggle">
+                  <span class="toggle-text">Enable Privacy Protection</span>
+                  <div class="toggle-switch">
+                    <input type="checkbox" id="historyToggle" class="toggle-input">
+                    <span class="toggle-slider"></span>
+                  </div>
+                </label>
+              </div>
+            </section>
+
+            <!-- Keywords Section -->
+            <section class="feature-section">
+              <div class="feature-header">
+                <h2>Smart Filtering</h2>
+                <span class="keyword-count" id="keywordCount">0 keywords</span>
+              </div>
+              <div class="feature-description">
+                Automatically remove history entries containing specified keywords
+              </div>
+              
+              <div class="add-keyword-container">
+                <input 
+                  type="text" 
+                  id="keywordInput" 
+                  placeholder="Enter keyword to filter..."
+                  class="keyword-input"
+                >
+                <button id="addKeywordBtn" class="add-keyword-btn">Add</button>
+              </div>
+
+              <div class="search-container">
+                <input 
+                  type="text" 
+                  id="searchInput" 
+                  placeholder="Search filters..."
+                  class="search-input"
+                >
+              </div>
+
+              <div class="keywords-list" id="keywordsList">
+                <div class="empty-state">
+                  <div class="empty-icon">🔍</div>
+                  <div class="empty-text">No filters added</div>
+                </div>
+              </div>
+
+              <div class="action-buttons">
+                <button id="clearAllBtn" class="action-btn clear-btn">Clear All Filters</button>
+              </div>
+            </section>
+          </div>
+        </main>
+
+            <!-- Footer -->
+        <footer class="footer">
+          <div class="footer-main">
+            <div class="footer-links">
+              <button class="footer-link-btn" id="changelogBtn">Changelog</button>
+              <button class="footer-link-btn" id="creditsBtn">Credits</button>
+              <a href="https://sqtech.dev/historyguard-pro/privacy-policy" target="_blank" class="footer-link">Privacy Policy</a>
+              <a href="https://sqtech.dev/historyguard-pro/terms-of-service" target="_blank" class="footer-link">Terms of Service</a>
+            </div>
+          </div>
+          
+          <div class="footer-bottom">
+            <div class="footer-copyright">
+              <span>© 2025</span>
+              <a href="https://sqtech.dev/historyguard-pro" target="_blank" class="author-link">SQ Tech</a>
+              <span>All rights reserved</span>
+            </div>
+          </div>
+        </footer>
+  </div>
+
+  <!-- Notification Container -->
+  <div id="notificationContainer" class="notification-container"></div>
+
+  <!-- Changelog Modal -->
+  <div id="changelogModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Changelog</h3>
+        <button class="modal-close" id="changelogClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="changelog-version">
+          <h4>v1.0.0 - Initial Release</h4>
+          <div class="changelog-date">September 2025</div>
+          <ul class="changelog-list">
+            <li><strong>Privacy Protection</strong> - Block new browsing history from being recorded</li>
+            <li><strong>Smart Filtering</strong> - Automatically remove history entries containing specified keywords</li>
+            <li><strong>Modern UI</strong> - Clean, professional popup interface</li>
+            <li><strong>Real-time Search</strong> - Filter keywords with instant search</li>
+            <li><strong>Smart Notifications</strong> - Internal notification system</li>
+            <li><strong>Chrome Sync</strong> - Settings sync across devices</li>
+            <li><strong>Data Protection</strong> - Secure keyword management</li>
+            <li><strong>Responsive Design</strong> - Optimized for all screen sizes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Credits Modal -->
+  <div id="creditsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Credits & Acknowledgments</h3>
+        <button class="modal-close" id="creditsClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="credits-section">
+          <h4>Development Team</h4>
+          <div class="credit-item">
+            <div class="credit-name">SQ Tech</div>
+            <div class="credit-role">Lead Developer & Designer</div>
+            <div class="credit-website">
+              <a href="https://sqtech.dev" target="_blank">sqtech.dev</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="credits-section">
+          <h4>Technologies Used</h4>
+          <div class="tech-grid">
+            <div class="tech-item">Chrome Extension APIs</div>
+            <div class="tech-item">Manifest V3</div>
+            <div class="tech-item">ES Modules</div>
+            <div class="tech-item">Webpack</div>
+            <div class="tech-item">CSS3</div>
+            <div class="tech-item">JavaScript ES2024</div>
+          </div>
+        </div>
+        
+        <div class="credits-section">
+          <h4>Icon Attribution</h4>
+          <div class="credit-item">
+            <div class="credit-name">Document Icons</div>
+            <div class="credit-role">Created by Futuer</div>
+            <div class="credit-website">
+              <a href="https://www.flaticon.com/free-icons/document" target="_blank">Flaticon</a>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="popup.mjs"></script>
+</body>
+</html>

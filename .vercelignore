@@ -1,0 +1,6 @@
+# Ignore everything except privacy policy
+*
+
+# Only include privacy policy
+!privacy-policy.html
+!vercel.json
