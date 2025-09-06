@@ -169,7 +169,7 @@ HistoryGuard Pro is an advanced browser history management tool that operates on
 
 ### **About SQ Tech**
 - **Website**: [sqtech.dev](https://sqtech.dev)
-- **Privacy Policy**: [sqtech.dev/projects/historyguard-pro/privacy-policy](https://www.sqtech.dev/projects/historyguard-pro/privacy-policy)
+- **Privacy Policy**: [sqtech.dev/projects/historyguard-pro/privacy-policy](https://sqtech.dev/projects/historyguard-pro/privacy-policy)
 - **Terms of Service**: [sqtech.dev/projects/historyguard-pro/terms-and-conditions](https://www.sqtech.dev/projects/historyguard-pro/terms-and-conditions)
 
 ## 🏆 Why Choose HistoryGuard Pro?

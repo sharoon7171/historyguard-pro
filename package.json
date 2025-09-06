@@ -7,8 +7,7 @@
   "main": "src/background/service-worker.mjs",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "dev": "webpack --mode development --watch",
-    "deploy:privacy": "vercel --prod"
+    "dev": "webpack --mode development --watch"
   },
   "devDependencies": {
     "webpack": "^5.88.0",
