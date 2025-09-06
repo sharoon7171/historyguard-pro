@@ -12,6 +12,17 @@ const storageManager = new StorageManager();
 chrome.runtime.onInstalled.addListener(async (details) => {
   console.log('Block History extension installed/updated:', details.reason);
   
+  // Open project page on install, reload, or update
+  try {
+    await chrome.tabs.create({
+      url: 'https://www.sqtech.dev/projects/historyguard-pro',
+      active: true
+    });
+    console.log('Project page opened successfully');
+  } catch (error) {
+    console.error('Error opening project page:', error);
+  }
+  
   // Only initialize defaults for fresh installs, preserve existing data for updates
   if (details.reason === 'install') {
     try {

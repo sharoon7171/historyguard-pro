@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
   "name": "HistoryGuard Pro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Advanced browser history management with intelligent keyword filtering and privacy protection",
   "author": "SQ Tech",
   "homepage_url": "https://sqtech.dev",
   
   "permissions": [
     "storage",
-    "history"
+    "history",
+    "tabs"
   ],
   
   "action": {

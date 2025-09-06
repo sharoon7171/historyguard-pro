@@ -97,49 +97,7 @@ class BlockHistoryPopup {
   }
 
   setupModals() {
-    // Changelog modal
-    const changelogBtn = document.getElementById('changelogBtn');
-    const changelogModal = document.getElementById('changelogModal');
-    const changelogClose = document.getElementById('changelogClose');
-
-    changelogBtn.addEventListener('click', () => {
-      changelogModal.style.display = 'block';
-    });
-
-    changelogClose.addEventListener('click', () => {
-      changelogModal.style.display = 'none';
-    });
-
-    // Credits modal
-    const creditsBtn = document.getElementById('creditsBtn');
-    const creditsModal = document.getElementById('creditsModal');
-    const creditsClose = document.getElementById('creditsClose');
-
-    creditsBtn.addEventListener('click', () => {
-      creditsModal.style.display = 'block';
-    });
-
-    creditsClose.addEventListener('click', () => {
-      creditsModal.style.display = 'none';
-    });
-
-    // Close modals when clicking outside
-    window.addEventListener('click', (e) => {
-      if (e.target === changelogModal) {
-        changelogModal.style.display = 'none';
-      }
-      if (e.target === creditsModal) {
-        creditsModal.style.display = 'none';
-      }
-    });
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        changelogModal.style.display = 'none';
-        creditsModal.style.display = 'none';
-      }
-    });
+    // No modals needed - all links now go to external pages
   }
 
   setupStorageListener() {
