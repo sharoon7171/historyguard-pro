@@ -1,4 +1,4 @@
-# HistoryGuard Pro - Advanced Browser History Management
+# HistoryGuard Pro - Advanced Chrome Extension for Browser History Management
 
 **Take complete control of your browsing history with intelligent filtering and privacy protection.**
 
@@ -6,7 +6,7 @@ HistoryGuard Pro is a powerful Chrome extension that gives you unprecedented con
 
 ## 🛡️ What is HistoryGuard Pro?
 
-HistoryGuard Pro is an advanced browser history management tool that operates on two powerful levels:
+HistoryGuard Pro is an advanced browser history management Chrome extension that operates on two powerful levels:
 
 ### **Privacy Protection Mode**
 - **Blocks NEW history entries** when enabled
@@ -19,6 +19,8 @@ HistoryGuard Pro is an advanced browser history management tool that operates on
 - Automatically deletes ALL history entries (old and new) containing your specified keywords
 - Works independently of Privacy Protection mode
 - Real-time monitoring and instant deletion
+
+> **📖 Want detailed information about these features? Check out our [complete setup guide and documentation](https://www.sqtech.dev/projects/historyguard-pro) on our website!**
 
 ## 🚀 Key Features
 
@@ -42,6 +44,8 @@ HistoryGuard Pro is an advanced browser history management tool that operates on
 - **Visual Counter**: See exactly how many filters you have active
 - **Smart Notifications**: Get instant feedback on all actions
 
+> **💡 Need help with advanced configuration? Our [detailed tutorials and configuration guide](https://www.sqtech.dev/projects/historyguard-pro) covers everything you need to know!**
+
 ### **💾 Data Persistence & Sync**
 - **Chrome Sync**: Your settings and keywords sync across all your Chrome browsers
 - **Automatic Backup**: Settings are preserved during extension updates
@@ -62,25 +66,20 @@ HistoryGuard Pro is an advanced browser history management tool that operates on
 2. **Click** the extension icon in your browser toolbar
 3. **Explore** the clean, intuitive interface
 
-### **Privacy Protection**
-1. **Toggle** the "Enable Privacy Protection" switch
-2. **Green indicator** shows when protection is active
-3. **Red indicator** shows when protection is disabled
-4. **All new browsing** will not be recorded when enabled
-
-### **Smart Filtering**
-1. **Add Keywords**: Type keywords in the "Enter keyword to filter..." field
-2. **Click Add**: Keywords are added to your filter list
+### **Quick Setup**
+1. **Toggle** the "Enable Privacy Protection" switch for instant privacy
+2. **Add Keywords**: Type keywords to filter your browser history
 3. **Automatic Deletion**: Matching history entries are removed instantly
-4. **Search Filters**: Use the search bar to find specific keywords
-5. **Remove Keywords**: Click the "×" button next to any keyword
-6. **Clear All**: Use "Clear All Filters" to remove all keywords at once
 
-### **Managing Your Filters**
-- **View All**: All keywords are shown when search is empty
-- **Search**: Type to filter your keyword list
-- **Exact Match**: Search finds keywords with exact, case-insensitive matching
-- **Real-Time**: Search results update as you type
+> **📚 For step-by-step setup instructions and advanced configuration options, visit our [comprehensive guide](https://www.sqtech.dev/projects/historyguard-pro) on the website!**
+
+### **Advanced Features**
+- **Real-Time Monitoring**: Continuously watches for new history entries
+- **Bulk Operations**: Clear all filters with one click
+- **Chrome Sync**: Settings sync across all your Chrome browsers
+- **Smart Notifications**: Get instant feedback on all actions
+
+> **📚 Need more detailed instructions? Check out our [complete user manual](https://www.sqtech.dev/projects/historyguard-pro) with detailed explanations and troubleshooting tips!**
 
 ## 🎯 Perfect For
 
@@ -109,6 +108,8 @@ HistoryGuard Pro is an advanced browser history management tool that operates on
 - Block entertainment sites during study time
 - Maintain focused browsing history
 
+> **👥 Want to learn more about user experiences? Visit our [project page](https://www.sqtech.dev/projects/historyguard-pro) to read detailed information and user feedback!**
+
 ## 🔒 Privacy & Security
 
 ### **Complete Privacy**
@@ -127,6 +128,8 @@ HistoryGuard Pro is an advanced browser history management tool that operates on
 - **Encrypted Storage**: All data is encrypted by Chrome's security system
 - **No External Servers**: Nothing is sent to external servers
 
+> **🔐 For detailed privacy policy and security information, visit our [security documentation](https://www.sqtech.dev/projects/historyguard-pro) on the website!**
+
 ## ⚡ Performance & Reliability
 
 ### **Lightweight & Fast**
@@ -141,31 +144,13 @@ HistoryGuard Pro is an advanced browser history management tool that operates on
 - **Update Safe**: Settings preserved during extension updates
 - **Chrome Compatible**: Works with all modern Chrome versions
 
-## 🆕 What's New in v1.0.0
-
-### **Core Features**
-- ✅ Privacy Protection toggle for blocking new history
-- ✅ Smart keyword filtering with instant deletion
-- ✅ Real-time search and management
-- ✅ Chrome sync for settings persistence
-- ✅ Modern, responsive user interface
-- ✅ Internal toast notifications
-- ✅ Skeleton loading system
-- ✅ Professional modal dialogs
-
-### **User Experience**
-- ✅ Intuitive one-click controls
-- ✅ Visual status indicators
-- ✅ Smooth animations and transitions
-- ✅ Professional design and layout
-- ✅ Comprehensive help and information
+> **📊 Want to see technical specifications and detailed information? Check out our [technical documentation](https://www.sqtech.dev/projects/historyguard-pro) for comprehensive details!**
 
 ## 📞 Support & Contact
 
 ### **Getting Help**
 - **Chrome Web Store**: Rate and review on the store page
-- **Website**: Visit [sqtech.dev/projects/historyguard-pro](https://www.sqtech.dev/projects/historyguard-pro)
-- **Support**: Contact us at [sqtech.dev/support](https://sqtech.dev/support)
+- **Website**: Visit [sqtech.dev/projects/historyguard-pro](https://www.sqtech.dev/projects/historyguard-pro) for complete documentation and support
 
 ### **About SQ Tech**
 - **Website**: [sqtech.dev](https://sqtech.dev)
